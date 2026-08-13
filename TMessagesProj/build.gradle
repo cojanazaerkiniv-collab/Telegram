@@ -210,7 +210,10 @@ android {
         release {
             jniDebuggable false
             minifyEnabled true
-            shrinkResources true
+            // Resource shrinking is an application-module feature; AGP rejects it
+            // here because TMessagesProj is a library. It is enabled in
+            // TMessagesProj_App instead, which is where it actually shrinks the APK.
+            shrinkResources false
             multiDexEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), '../TMessagesProj/proguard-rules.pro'
             ndk.debugSymbolLevel = 'FULL'
