@@ -32,6 +32,31 @@ build succeeds. They still point at the upstream Firebase project, so **push
 notifications, Maps and Google sign-in will not work until these files are
 replaced with ones generated for a `uz.uzgram.messenger` project**.
 
+## Building
+
+`.github/workflows/build.yml` builds a signed APK on GitHub Actions. Open the
+**Actions** tab, pick *Build UZGRAM APK*, hit **Run workflow**, choose `release`
+or `debug`, and collect the APK from the run's Artifacts section.
+
+No secrets are needed: `TMessagesProj/config/release.keystore` is committed and
+its passwords are in `gradle.properties`, so the build signs itself. That also
+means the APK is signed with a key that is public — fine for testing, not for
+publishing. Generate your own keystore before you ship anything.
+
+Expect a long run. The NDK compiles native code for four ABIs
+(`armeabi-v7a`, `arm64-v8a`, `x86`, `x86_64`), which dominates the build; the
+job allows three hours. To make CI iterate faster, trim `abiFilters` in the
+`afat` flavor of `TMessagesProj_App/build.gradle` down to `arm64-v8a`.
+
+Locally the equivalent is:
+
+```
+./gradlew :TMessagesProj_App:assembleAfatRelease
+```
+
+which needs JDK 17, SDK platform 35, build-tools 35.0.0, NDK 27.2.12479018 and
+the SDK's CMake 3.10.2 (not a newer system cmake).
+
 ## Liquid glass layer
 
 Everything lives in `org.telegram.ui.Components.LiquidGlass`: the palette, the
