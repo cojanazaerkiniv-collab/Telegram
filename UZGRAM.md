@@ -26,9 +26,15 @@ still spells those keys "Telegram".
 
 ### Firebase / Huawei
 
-`google-services.json` and `agconnect-services.json` had their `package_name`
-entries renamed so the Gradle plugins accept the new application id and the
-build succeeds. They still point at the upstream Firebase project, so **push
+The **application** modules' `google-services.json` files had their
+`package_name` entries renamed to `uz.uzgram.messenger*`, so the Gradle plugin
+matches the new application id.
+
+`TMessagesProj/google-services.json` deliberately keeps the original
+`org.telegram.messenger*` names. That module is an Android *library*, which has
+no application id, so the plugin resolves it against the module's `namespace` —
+still `org.telegram.messenger`. Renaming it there fails the build with
+"No matching client found for package name 'org.telegram.messenger'". They still point at the upstream Firebase project, so **push
 notifications, Maps and Google sign-in will not work until these files are
 replaced with ones generated for a `uz.uzgram.messenger` project**.
 
